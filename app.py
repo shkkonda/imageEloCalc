@@ -22,16 +22,18 @@ def main():
 
     col1, col2 = st.beta_columns(2)
     with col1:
-        choice1 = st.image(os.path.join(IMAGE_FOLDER, image1), use_column_width=True)
+        if st.button("", key=f"select_{image1}"):
+            selected_image = image1
+        st.image(os.path.join(IMAGE_FOLDER, image1), use_column_width=True)
     with col2:
-        choice2 = st.image(os.path.join(IMAGE_FOLDER, image2), use_column_width=True)
+        if st.button("", key=f"select_{image2}"):
+            selected_image = image2
+        st.image(os.path.join(IMAGE_FOLDER, image2), use_column_width=True)
 
     if st.button("Submit"):
-        if choice1.button("Select", key=f"select_{image1}"):
-            selected_image = image1
-        elif choice2.button("Select", key=f"select_{image2}"):
-            selected_image = image2
-        else:
+        try:
+            selected_image
+        except NameError:
             st.warning("Please select an image.")
             return
 
