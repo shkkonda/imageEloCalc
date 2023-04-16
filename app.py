@@ -48,5 +48,5 @@ def main():
             st.error("Failed to submit response. Error: " + str(e))
             
             
- if __name__ == "__main__":
+if __name__ == "__main__":
     main()
