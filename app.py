@@ -32,7 +32,7 @@ def main():
         try:
             df_existing = pd.read_csv('responses.csv')
             df_existing = pd.concat([df_existing, df], ignore_index=True)
-            df_existing.to_csv(filename, index=False)
+            df_existing.to_csv(CSV_URL, index=False)
             st.success("Response submitted successfully.")
         except Exception as e:
             st.error("Failed to submit response. Error: " + str(e))
