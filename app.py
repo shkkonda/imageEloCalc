@@ -22,14 +22,14 @@ def main():
 
     col1, col2 = st.beta_columns(2)
     with col1:
-        choice1 = st.image(os.path.join(IMAGE_FOLDER, image1), use_column_width=True)
+        image_widget1 = st.image(os.path.join(IMAGE_FOLDER, image1), use_column_width=True)
     with col2:
-        choice2 = st.image(os.path.join(IMAGE_FOLDER, image2), use_column_width=True)
+        image_widget2 = st.image(os.path.join(IMAGE_FOLDER, image2), use_column_width=True)
 
     if st.button("Submit"):
-        if choice1.button("Select"):
+        if image_widget1.button("Select"):
             selected_image = image1
-        elif choice2.button("Select"):
+        elif image_widget2.button("Select"):
             selected_image = image2
         else:
             st.warning("Please select an image.")
@@ -46,7 +46,6 @@ def main():
             st.success("Response submitted successfully.")
         except Exception as e:
             st.error("Failed to submit response. Error: " + str(e))
-            
-            
+
 if __name__ == "__main__":
     main()
