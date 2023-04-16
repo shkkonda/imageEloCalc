@@ -23,7 +23,7 @@ def main():
 
     image1, image2 = get_random_images()
 
-    selected_image = image_select(images=[os.path.join(IMAGE_FOLDER, image1), os.path.join(IMAGE_FOLDER, image2)])
+    selected_image = image_select(label='Select preferred image', images=[os.path.join(IMAGE_FOLDER, image1), os.path.join(IMAGE_FOLDER, image2)])
     if selected_image:
         # Store the response in a CSV file on GitHub
         data = {"Image 1": os.path.join(IMAGE_FOLDER, image1), "Image 2": os.path.join(IMAGE_FOLDER, image2), "Choice": selected_image}
