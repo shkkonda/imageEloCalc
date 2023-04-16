@@ -30,7 +30,7 @@ def main():
         df = pd.DataFrame(data, index=[0])
         filename = "responses.csv"
         try:
-            df_existing = pd.read_csv(CSV_URL)
+            df_existing = pd.read_csv('responses.csv')
             df_existing = pd.concat([df_existing, df], ignore_index=True)
             df_existing.to_csv(filename, index=False)
             st.success("Response submitted successfully.")
