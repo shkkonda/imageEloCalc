@@ -46,3 +46,7 @@ def main():
             st.success("Response submitted successfully.")
         except Exception as e:
             st.error("Failed to submit response. Error: " + str(e))
+            
+            
+ if __name__ == "__main__":
+    main()
