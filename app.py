@@ -16,7 +16,7 @@ def get_random_image_pair(df) -> Tuple[str, str]:
     return left_image, right_image
 
 def show_image_pair(left_image: str, right_image: str):
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     with col1:
         st.image(left_image, width=300)
     with col2:
