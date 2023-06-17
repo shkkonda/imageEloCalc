@@ -5,6 +5,7 @@ import pandas as pd
 
 CSV_URL = "https://raw.githubusercontent.com/shkkonda/imageEloCalc/main/nokiamon_image.csv"
 final_df = pd.read_csv(CSV_URL)
+
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
     right_image = random.choice(df['image_link'])
@@ -15,7 +16,11 @@ def get_random_image_pair(df) -> Tuple[str, str]:
     return left_image, right_image
 
 def show_image_pair(left_image: str, right_image: str):
-    st.image([left_image, right_image], width=300)
+    col1, col2 = st.beta_columns(2)
+    with col1:
+        st.image(left_image, width=300)
+    with col2:
+        st.image(right_image, width=300)
 
 def main(df):
     st.title("Nokiamon ELO Rating")
@@ -29,5 +34,4 @@ def main(df):
     # To do that, you'll need to store user selections and ELO ratings in a database.
 
 if __name__ == "__main__":
-    # Assuming 'final_df' contains the DataFrame with 'name' and 'image_link' columns
     main(final_df)
