@@ -18,15 +18,15 @@ def get_random_image_pair(df) -> Tuple[str, str]:
 def show_image_pair(left_image: str, right_image: str, df):
     col1, col2 = st.columns(2)
     with col1:
-        if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0]):
-            left_image, right_image = get_random_image_pair(df)
-            show_image_pair(left_image, right_image, df)
         st.image(left_image, width=300)
-    with col2:
-        if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0]):
+        if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key='left_button'):
             left_image, right_image = get_random_image_pair(df)
             show_image_pair(left_image, right_image, df)
+    with col2:
         st.image(right_image, width=300)
+        if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key='right_button'):
+            left_image, right_image = get_random_image_pair(df)
+            show_image_pair(left_image, right_image, df)
 
 def main(df):
     st.title("Nokiamon ELO Rating")
@@ -40,4 +40,4 @@ def main(df):
     # To do that, you'll need to store user selections and ELO ratings in a database.
 
 if __name__ == "__main__":
-    main(final_df)
+   
