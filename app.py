@@ -18,10 +18,10 @@ def get_random_image_pair(df) -> Tuple[str, str]:
 def show_image_pair(left_image: str, right_image: str):
     col1, col2 = st.columns(2)
     with col1:
-        if st.button(image=left_image, key="left_button"):
+        if st.button(label=f'<img src="{left_image}" width="300">', key="left_button", unsafe_allow_html=True):
             pass  # Placeholder action for left button press
     with col2:
-        if st.button(image=right_image, key="right_button"):
+        if st.button(label=f'<img src="{right_image}" width="300">', key="right_button", unsafe_allow_html=True):
             pass  # Placeholder action for right button press
 
 def main(df):
