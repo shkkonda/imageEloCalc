@@ -1,41 +1,33 @@
-import os
 import random
+from typing import List, Tuple
 import streamlit as st
 import pandas as pd
-from streamlit_image_select import image_select
 
-IMAGE_FOLDER = "nokiamon_list/"
-CSV_URL = "https://raw.githubusercontent.com/shkkonda/imageEloCalc/main/responses.csv"
+CSV_URL = "https://raw.githubusercontent.com/shkkonda/imageEloCalc/main/nokiamon_image.csv"
+final_df = pd.read_csv(CSV_URL)
+def get_random_image_pair(df) -> Tuple[str, str]:
+    left_image = random.choice(df['image_link'])
+    right_image = random.choice(df['image_link'])
 
-def get_random_images():
-    images = os.listdir(IMAGE_FOLDER)
-    image1 = random.choice(images)
-    image2 = random.choice(images)
-    while image1 == image2:
-        image2 = random.choice(images)
-    return image1, image2
+    while left_image == right_image:
+        right_image = random.choice(df['image_link'])
 
-def main():
-    st.set_page_config(page_title="Image Preference Survey")
+    return left_image, right_image
 
-    st.title("Image Preference Survey")
-    st.write("Please select which image you prefer out of the two options shown.")
+def show_image_pair(left_image: str, right_image: str):
+    st.image([left_image, right_image], width=300)
 
-    image1, image2 = get_random_images()
+def main(df):
+    st.title("Nokiamon ELO Rating")
 
-    selected_image = image_select(label='Select preferred image', images=[os.path.join(IMAGE_FOLDER, image1), os.path.join(IMAGE_FOLDER, image2)])
-    if selected_image:
-        # Store the response in a CSV file on GitHub
-        data = {"Image 1": os.path.join(IMAGE_FOLDER, image1), "Image 2": os.path.join(IMAGE_FOLDER, image2), "Choice": selected_image}
-        df = pd.DataFrame(data, index=[0])
-        filename = "responses.csv"
-        try:
-            df_existing = pd.read_csv('responses.csv')
-            df_existing = pd.concat([df_existing, df], ignore_index=True)
-            df_existing.to_csv(CSV_URL, index=False)
-            st.success("Response submitted successfully.")
-        except Exception as e:
-            st.error("Failed to submit response. Error: " + str(e))
+    left_image, right_image = get_random_image_pair(df)
+
+    show_image_pair(left_image, right_image)
+
+    # You can enhance this implementation by adding user authentication,
+    # tracking user selections, and calculating the ELO rating for each Nokiamon.
+    # To do that, you'll need to store user selections and ELO ratings in a database.
 
 if __name__ == "__main__":
-    main()
+    # Assuming 'final_df' contains the DataFrame with 'name' and 'image_link' columns
+    main(final_df)
