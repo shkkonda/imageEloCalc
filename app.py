@@ -18,9 +18,11 @@ def get_random_image_pair(df) -> Tuple[str, str]:
 def show_image_pair(left_image: str, right_image: str):
     col1, col2 = st.columns(2)
     with col1:
-        st.image(left_image, width=300)
+        if st.button(image=left_image, key="left_button"):
+            pass  # Placeholder action for left button press
     with col2:
-        st.image(right_image, width=300)
+        if st.button(image=right_image, key="right_button"):
+            pass  # Placeholder action for right button press
 
 def main(df):
     st.title("Nokiamon ELO Rating")
@@ -28,6 +30,11 @@ def main(df):
     left_image, right_image = get_random_image_pair(df)
 
     show_image_pair(left_image, right_image)
+
+    # Generate new random images on button press
+    if st.button("Generate New Images"):
+        left_image, right_image = get_random_image_pair(df)
+        show_image_pair(left_image, right_image)
 
     # You can enhance this implementation by adding user authentication,
     # tracking user selections, and calculating the ELO rating for each Nokiamon.
