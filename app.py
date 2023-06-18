@@ -17,16 +17,20 @@ def get_random_image_pair(df) -> Tuple[str, str]:
 
 def show_image_pair(left_image: str, right_image: str, df):
     col1, col2 = st.columns(2)
+    with st.expander("Enter your wallet address"):
+        wallet_address = st.text_input("Wallet Address")
+
     with col1:
-        st.image(left_image, width=300)
         if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key='left_button'):
             left_image, right_image = get_random_image_pair(df)
             show_image_pair(left_image, right_image, df)
+        st.image(left_image, width=300)
+
     with col2:
-        st.image(right_image, width=300)
         if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key='right_button'):
             left_image, right_image = get_random_image_pair(df)
             show_image_pair(left_image, right_image, df)
+        st.image(right_image, width=300)
 
 def main(df):
     st.title("Nokiamon ELO Rating")
@@ -34,6 +38,9 @@ def main(df):
     left_image, right_image = get_random_image_pair(df)
 
     show_image_pair(left_image, right_image, df)
+
+    # Store user selections and wallet addresses in a database
+    # store_user_selection(left_image, right_image, wallet_address)
 
     # You can enhance this implementation by adding user authentication,
     # tracking user selections, and calculating the ELO rating for each Nokiamon.
