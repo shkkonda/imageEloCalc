@@ -47,4 +47,4 @@ def main(df):
     # To do that, you'll need to store user selections and ELO ratings in a database.
 
 if __name__ == "__main__":
-    main(final
+    main(final_df)
