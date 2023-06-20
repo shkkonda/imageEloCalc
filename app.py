@@ -53,13 +53,13 @@ def show_image_pair(left_image: str, right_image: str, df):
     col3, col4 = st.columns(2)
     
     with col3:
-        if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key='left_button'):
+        if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
             left_image, right_image = get_random_image_pair(df)
             show_image_pair(left_image, right_image, df)
             store_user_selection(left_image, right_image, left_image, wallet_address)
 
     with col4:
-        if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key='right_button'):
+        if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
             left_image, right_image = get_random_image_pair(df)
             show_image_pair(left_image, right_image, df)
             store_user_selection(left_image, right_image, right_image, wallet_address)
