@@ -1,1 +1,2 @@
 streamlit-image-select
+psycopg2
