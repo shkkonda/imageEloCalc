@@ -19,19 +19,6 @@ password = 'wCJTQ205EKHWh6fXzxLc'
 conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
 cur = conn.cursor()
 
-# Create user_selections table if it doesn't exist
-cur.execute('''
-    CREATE TABLE IF NOT EXISTS user_selections (
-        id SERIAL PRIMARY KEY,
-        left_image_link VARCHAR,
-        right_image_link VARCHAR,
-        selected_image_link VARCHAR,
-        wallet_address VARCHAR,
-        timestamp TIMESTAMP
-    );
-''')
-conn.commit()
-
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
     right_image = random.choice(df['image_link'])
