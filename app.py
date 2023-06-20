@@ -55,14 +55,14 @@ def show_image_pair(left_image: str, right_image: str, df):
     with col3:
         if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
             left_image, right_image = get_random_image_pair(df)
-            show_image_pair(left_image, right_image, df)
             store_user_selection(left_image, right_image, left_image, wallet_address)
+            show_image_pair(left_image, right_image, df)
 
     with col4:
         if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
             left_image, right_image = get_random_image_pair(df)
-            show_image_pair(left_image, right_image, df)
             store_user_selection(left_image, right_image, right_image, wallet_address)
+            show_image_pair(left_image, right_image, df)
 
 def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
     # Insert user selection into the user_selections table
