@@ -16,8 +16,8 @@ port = '5432'
 password = 'wCJTQ205EKHWh6fXzxLc'
 
 # Connect to the database
-conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
-cur = conn.cursor()
+# conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
+# cur = conn.cursor()
 
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
