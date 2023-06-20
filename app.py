@@ -10,7 +10,7 @@ final_df = pd.read_csv(CSV_URL)
 
 # Database connection details
 host = 'database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com'
-dbname = 'your_database_name'  # Update with your database name
+dbname = ''  # Update with your database name
 user = 'postgres'
 port = '5432'
 password = 'wCJTQ205EKHWh6fXzxLc'
