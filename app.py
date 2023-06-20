@@ -51,14 +51,14 @@ def show_image_pair(left_image: str, right_image: str, df):
             show_image_pair(left_image, right_image, df)
             # store_user_selection(left_image, right_image, right_image, wallet_address)
 
-def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
+# def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
     # Insert user selection into the user_selections table
-    insert_query = sql.SQL('''
-        INSERT INTO user_selections (left_image_link, right_image_link, selected_image_link, wallet_address, timestamp)
-        VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP);
-    ''')
-    cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
-    conn.commit()
+  #  insert_query = sql.SQL('''
+   #     INSERT INTO user_selections (left_image_link, right_image_link, selected_image_link, wallet_address, timestamp)
+    #    VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP);
+    #''')
+    #cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
+    #conn.commit()
 
 def main(df):
     st.title("Nokiamon ELO Rating")
