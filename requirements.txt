@@ -1,2 +1,2 @@
 streamlit-image-select
-psycopg2
+psycopg2-binary
