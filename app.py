@@ -69,8 +69,5 @@ def main(df):
 
     show_image_pair(left_image, right_image, df)
 
-    # Store user selections and wallet addresses in the database
-    store_user_selection(left_image, right_image, None, wallet_address)
-
     # You can enhance this implementation by adding user authentication,
     # tracking user selections, and calculating
