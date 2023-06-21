@@ -94,6 +94,7 @@ def main(df):
     left_image, right_image = get_random_image_pair(df)
 
     show_image_pair(left_image, right_image, df, wallet_address)
+    display_stored_selections()  # Display the stored selections
 
     # You can enhance this implementation by adding user authentication,
     # tracking user selections, and calculating the ELO rating for each Nokiamon.
