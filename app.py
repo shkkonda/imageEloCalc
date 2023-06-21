@@ -70,7 +70,7 @@ def store_user_selection(left_image: str, right_image: str, selected_image: str,
     ''')
     try:
         cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
-        conn.commit()
+        conn.commit()  # Commit the changes to the database
     except Exception as e:
         st.write(f"Error storing user selection: {str(e)}")
 
