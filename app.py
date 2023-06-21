@@ -15,22 +15,15 @@ user = 'postgres'
 port = '5432'
 password = 'eRYebFlJePOFRZeVVuQT'
 
-# Connect to the database
-conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
-cur = conn.cursor()
+@st.cache(allow_output_mutation=True)
+def get_database_connection():
+    # Connect to the database
+    conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
+    return conn
 
-# Create user_selections table if it doesn't exist
-cur.execute('''
-    CREATE TABLE IF NOT EXISTS user_selections (
-        id SERIAL PRIMARY KEY,
-        left_image_link VARCHAR,
-        right_image_link VARCHAR,
-        selected_image_link VARCHAR,
-        wallet_address VARCHAR,
-        timestamp TIMESTAMP
-    );
-''')
-conn.commit()
+# Connect to the database
+conn = get_database_connection()
+cur = conn.cursor()
 
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
