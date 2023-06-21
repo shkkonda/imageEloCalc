@@ -8,22 +8,34 @@ from psycopg2 import sql
 CSV_URL = "https://raw.githubusercontent.com/shkkonda/imageEloCalc/main/nokiamon_image.csv"
 final_df = pd.read_csv(CSV_URL)
 
-# Database connection details
-host = 'database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com'
-dbname = ''  # Update with your database name
-user = 'postgres'
-port = '5432'
-password = 'eRYebFlJePOFRZeVVuQT'
+# Initialize connection.
+# Uses st.cache_resource to only run once.
+@st.cache_resource
+def init_connection():
+    # Database connection details
+    host = 'database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com'
+    dbname = ''  # Update with your database name
+    user = 'postgres'
+    port = '5432'
+    password = 'eRYebFlJePOFRZeVVuQT'
 
-@st.cache(allow_output_mutation=True)
-def get_database_connection():
-    # Connect to the database
-    conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
-    return conn
+    return psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
 
-# Connect to the database
-conn = get_database_connection()
-cur = conn.cursor()
+conn = init_connection()
+
+# Perform query.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def store_user_selection(conn, left_image: str, right_image: str, selected_image: str, wallet_address: str):
+    # Insert user selection into the user_selections table
+    insert_query = sql.SQL('''
+        INSERT INTO user_selections (left_image_link, right_image_link, selected_image_link, wallet_address, timestamp)
+        VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP);
+    ''')
+    
+    with conn.cursor() as cur:
+        cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
+        conn.commit()
 
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
@@ -47,43 +59,20 @@ def show_image_pair(left_image: str, right_image: str, df, wallet_address: str):
     
     with col3:
         if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
-            store_user_selection(left_image, right_image, left_image, wallet_address)
+            store_user_selection(conn, left_image, right_image, left_image, wallet_address)
 
     with col4:
         if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
-            store_user_selection(left_image, right_image, right_image, wallet_address)
-
-def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
-    # Insert user selection into the user_selections table
-    insert_query = sql.SQL('''
-        INSERT INTO user_selections (left_image_link, right_image_link, selected_image_link, wallet_address, timestamp)
-        VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP);
-    ''')
-    cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
-    conn.commit()
+            store_user_selection(conn, left_image, right_image, right_image, wallet_address)
 
 def main(df):
     st.title("Nokiamon ELO Rating")
 
     wallet_address = st.text_input("Wallet Address")
 
-    if 'user_selections' not in st.session_state:
-        st.session_state.user_selections = []
-
     left_image, right_image = get_random_image_pair(df)
 
     show_image_pair(left_image, right_image, df, wallet_address)
-
-    if st.button("Submit"):
-        for selection in st.session_state.user_selections:
-            store_user_selection(*selection)
-        
-        st.success("Selections submitted successfully!")
-        st.session_state.user_selections = []
-
-    # You can enhance this implementation by adding user authentication,
-    # tracking user selections, and calculating the ELO rating for each Nokiamon.
-    # To do that, you'll need to store user selections and ELO ratings in a database.
 
 if __name__ == "__main__":
     main(final_df)
