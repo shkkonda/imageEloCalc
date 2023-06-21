@@ -55,12 +55,12 @@ def show_image_pair(left_image: str, right_image: str, df, wallet_address: str):
     if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
         left_image, right_image = get_random_image_pair(df)
         store_user_selection(left_image, right_image, left_image, wallet_address)
+        display_stored_selections()
 
     if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
         left_image, right_image = get_random_image_pair(df)
         store_user_selection(left_image, right_image, right_image, wallet_address)
-
-    display_stored_selections()
+        display_stored_selections()
 
 def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
     # Insert user selection into the user_selections table
@@ -81,23 +81,4 @@ def display_stored_selections():
 
     if len(selections) > 0:
         st.subheader("Stored Selections")
-        df = pd.DataFrame(selections, columns=['ID', 'Left Image', 'Right Image', 'Selected Image', 'Wallet Address', 'Timestamp'])
-        st.dataframe(df)
-    else:
-        st.write("No stored selections yet.")
-
-def main(df):
-    st.title("Nokiamon ELO Rating")
-
-    wallet_address = st.text_input("Wallet Address")
-
-    left_image, right_image = get_random_image_pair(df)
-
-    show_image_pair(left_image, right_image, df, wallet_address)
-
-    # You can enhance this implementation by adding user authentication,
-    # tracking user selections, and calculating the ELO rating for each Nokiamon.
-    # To do that, you'll need to store user selections and ELO ratings in a database.
-
-if __name__ == "__main__":
-    main(final_df)
+        df = pd.DataFrame(selections,
