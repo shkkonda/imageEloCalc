@@ -52,17 +52,15 @@ def show_image_pair(left_image: str, right_image: str, df, wallet_address: str):
 
     col3, col4 = st.columns(2)
 
-    with col3:
-        if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
-            left_image, right_image = get_random_image_pair(df)
-            store_user_selection(left_image, right_image, left_image, wallet_address)
-            show_image_pair(left_image, right_image, df, wallet_address)
+    if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
+        left_image, right_image = get_random_image_pair(df)
+        store_user_selection(left_image, right_image, left_image, wallet_address)
 
-    with col4:
-        if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
-            left_image, right_image = get_random_image_pair(df)
-            store_user_selection(left_image, right_image, right_image, wallet_address)
-            show_image_pair(left_image, right_image, df, wallet_address)
+    if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
+        left_image, right_image = get_random_image_pair(df)
+        store_user_selection(left_image, right_image, right_image, wallet_address)
+
+    display_stored_selections()
 
 def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
     # Insert user selection into the user_selections table
@@ -73,13 +71,20 @@ def store_user_selection(left_image: str, right_image: str, selected_image: str,
     try:
         cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
         conn.commit()
-        st.write("Stored in the database:")
-        st.write("Left Image:", left_image)
-        st.write("Right Image:", right_image)
-        st.write("Selected Image:", selected_image)
-        st.write("Wallet Address:", wallet_address)
     except Exception as e:
         st.write(f"Error storing user selection: {str(e)}")
+
+def display_stored_selections():
+    # Retrieve stored selections from the user_selections table
+    cur.execute("SELECT * FROM user_selections;")
+    selections = cur.fetchall()
+
+    if len(selections) > 0:
+        st.subheader("Stored Selections")
+        df = pd.DataFrame(selections, columns=['ID', 'Left Image', 'Right Image', 'Selected Image', 'Wallet Address', 'Timestamp'])
+        st.dataframe(df)
+    else:
+        st.write("No stored selections yet.")
 
 def main(df):
     st.title("Nokiamon ELO Rating")
