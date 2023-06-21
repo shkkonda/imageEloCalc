@@ -8,24 +8,18 @@ from psycopg2 import sql
 CSV_URL = "https://raw.githubusercontent.com/shkkonda/imageEloCalc/main/nokiamon_image.csv"
 final_df = pd.read_csv(CSV_URL)
 
-# Initialize connection.
-# Uses st.cache_resource to only run once.
-@st.cache_resource
-def init_connection():
-    # Database connection details
-    host = 'database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com'
-    dbname = ''  # Update with your database name
-    user = 'postgres'
-    port = '5432'
-    password = 'eRYebFlJePOFRZeVVuQT'
-
-    return psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
-
-conn = init_connection()
+# Create a singleton object for the database connection
+@st.experimental_singleton
+def get_database_connection():
+    conn = psycopg2.connect(
+        host="database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com",
+        user="postgres",
+        password="eRYebFlJePOFRZeVVuQT",
+        database=""
+    )
+    return conn
 
 # Perform query.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
 def store_user_selection(conn, left_image: str, right_image: str, selected_image: str, wallet_address: str):
     # Insert user selection into the user_selections table
     insert_query = sql.SQL('''
@@ -33,9 +27,10 @@ def store_user_selection(conn, left_image: str, right_image: str, selected_image
         VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP);
     ''')
     
-    with conn.cursor() as cur:
-        cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
-        conn.commit()
+    cursor = get_database_connection().cursor()
+    cursor.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
+    get_database_connection().commit()
+    st.write("Data saved to database!")
 
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
