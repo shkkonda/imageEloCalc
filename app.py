@@ -21,9 +21,6 @@ def get_database_connection():
     conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
     return conn
 
-conn = get_database_connection()
-cur = conn.cursor()
-
 def get_random_image_pair(df) -> Tuple[str, str]:
     left_image = random.choice(df['image_link'])
     right_image = random.choice(df['image_link'])
@@ -48,13 +45,11 @@ def show_image_pair(left_image: str, right_image: str, df, wallet_address: str):
         if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
             left_image, right_image = get_random_image_pair(df)
             store_user_selection(left_image, right_image, left_image, wallet_address)
-            show_image_pair(left_image, right_image, df, wallet_address)
 
     with col4:
         if st.button(label=df.loc[df['image_link'] == right_image, 'name'].iloc[0], key=f'right_button_{right_image}'):
             left_image, right_image = get_random_image_pair(df)
             store_user_selection(left_image, right_image, right_image, wallet_address)
-            show_image_pair(left_image, right_image, df, wallet_address)
 
 def store_user_selection(left_image: str, right_image: str, selected_image: str, wallet_address: str):
     conn = get_database_connection()
