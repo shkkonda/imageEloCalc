@@ -9,7 +9,7 @@ CSV_URL = "https://raw.githubusercontent.com/shkkonda/imageEloCalc/main/nokiamon
 final_df = pd.read_csv(CSV_URL)
 
 # Create a singleton object for the database connection
-@st.experimental_singleton
+@st.cache_resource
 def get_database_connection():
     conn = psycopg2.connect(
         host="database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com",
@@ -54,6 +54,7 @@ def show_image_pair(left_image: str, right_image: str, df, wallet_address: str):
     
     with col3:
         if st.button(label=df.loc[df['image_link'] == left_image, 'name'].iloc[0], key=f'left_button_{left_image}'):
+            print("Hope it gets printed")
             store_user_selection(conn, left_image, right_image, left_image, wallet_address)
 
     with col4:
