@@ -81,4 +81,23 @@ def display_stored_selections():
 
     if len(selections) > 0:
         st.subheader("Stored Selections")
-        df = pd.DataFrame(selections,
+        df = pd.DataFrame(selections, columns=['ID', 'Left Image', 'Right Image', 'Selected Image', 'Wallet Address', 'Timestamp'])
+        st.dataframe(df)
+    else:
+        st.write("No stored selections yet.")
+
+def main(df):
+    st.title("Nokiamon ELO Rating")
+
+    wallet_address = st.text_input("Wallet Address")
+
+    left_image, right_image = get_random_image_pair(df)
+
+    show_image_pair(left_image, right_image, df, wallet_address)
+
+    # You can enhance this implementation by adding user authentication,
+    # tracking user selections, and calculating the ELO rating for each Nokiamon.
+    # To do that, you'll need to store user selections and ELO ratings in a database.
+
+if __name__ == "__main__":
+    main(final_df)
