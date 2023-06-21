@@ -13,9 +13,9 @@ host = 'database-1.cv9g4hhrgmvg.us-east-1.rds.amazonaws.com'
 dbname = ''  # Update with your database name
 user = 'postgres'
 port = '5432'
-password = 'wCJTQ205EKHWh6fXzxLc'
+password = 'eRYebFlJePOFRZeVVuQT'
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def get_database_connection():
     # Connect to the database
     conn = psycopg2.connect(host=host, dbname=dbname, user=user, port=port, password=password)
@@ -63,10 +63,6 @@ def store_user_selection(left_image: str, right_image: str, selected_image: str,
     ''')
     cur.execute(insert_query, (left_image, right_image, selected_image, wallet_address))
     conn.commit()
-
-    # Close the database connection
-    cur.close()
-    conn.close()
 
 def main(df):
     st.title("Nokiamon ELO Rating")
