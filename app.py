@@ -57,13 +57,15 @@ def display_stored_selections():
 def main(df):
     st.title("Nokiamon ELO Rating")
 
-    wallet_address = st.text_input("Wallet Address")
-    if st.button("Submit"):
-        st.write(f"Welcome {wallet_address}!")
+    if 'wallet_address' not in st.session_state:
+        st.session_state.wallet_address = st.text_input("Wallet Address")
+        if st.session_state.wallet_address:
+            st.write(f"Welcome {st.session_state.wallet_address}!")
 
+    if 'wallet_address' in st.session_state:
         left_image, right_image = get_random_image_pair(df)
 
-        show_image_pair(left_image, right_image, df, wallet_address)
+        show_image_pair(left_image, right_image, df, st.session_state.wallet_address)
         display_stored_selections()
 
 if __name__ == "__main__":
